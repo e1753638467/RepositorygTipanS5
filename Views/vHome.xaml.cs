@@ -11,15 +11,15 @@ public partial class vHome : ContentPage
 
     private void btnInsertar_Clicked(object sender, EventArgs e)
     {
-        status.Text = "";
-        App.PersonRepository.AddNewPerson(txtNombre.Text);
-        status.Text = App.personRepository.StatusMessage;
+        statusMessage.Text = "";
+        App.personRepo.AddNewPerson(txtNombre.Text);
+        statusMessage.Text = App.personRepo.StatusMessage;
     }
 
     private void btnlistar_Clicked(object sender, EventArgs e)
     {
-        status.Text = "";
-        List<Persona> people =App.personRepository.GetAllPeople();
-        ListaPersonas.ItemsSourse = people;
+        statusMessage.Text = "";
+        List<Persona> people =App.personRepo.GetAllPeople();
+        ListaPersonas.ItemsSource = people;
     }
 }

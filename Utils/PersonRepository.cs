@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace gTipanS5.Utils
 {
-    internal class PersonRepository
+    public class PersonRepository
     {
         string _dbPath;//ruta
         private SQLiteConnection conn;
+
         public string StatusMessage { get; set; }
         private void Init()
         {
@@ -20,6 +21,7 @@ namespace gTipanS5.Utils
                 return;
             conn = new(_dbPath);
             conn.CreateTable<Persona>();
+           
         }
         public PersonRepository(string dbPath)
         {
@@ -33,17 +35,14 @@ namespace gTipanS5.Utils
                 Init();
                 if (string.IsNullOrEmpty(nombre))
                     throw new Exception("Nombre requerido");
-                Persona person = new()
-                {
-                    Nombre = nombre
-                };
+                Persona person = new() { Name = nombre};
                 result = conn.Insert(person);
-                StatusMessage = String.Format("datos anadidos corerctamente", result, nombre);
+                StatusMessage = string.Format("datos anadidos correctamente", result, nombre);
 
             }
             catch (Exception ex)
             {
-                StatusMessage = String.Format("Error ", result, nombre);
+                StatusMessage = string.Format("Error ", nombre, ex.Message);
 
             }
 
@@ -60,9 +59,7 @@ namespace gTipanS5.Utils
             catch (Exception ex)
             {
 
-                StatusMessage = String.Format("Error  al mostrar", ex.Message);
-
-
+                StatusMessage = string.Format("Error  al mostrar", ex.Message);
 
             }
             return new List<Persona>();

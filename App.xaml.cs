@@ -1,18 +1,20 @@
 ﻿using gTipanS5.Utils;
 
 
+
 namespace gTipanS5
 {
     public partial class App : Application
     {
-        public static PersonRepository personRepository { get; set; }
+        public static PersonRepository personRepo { get; set; }
 
-        public App(PersonRepository person)
+        public App(PersonRepository personRepository)
         {
             InitializeComponent();
 
             MainPage = new Views.vHome();
-            personRepository = person;
+            personRepo = personRepository;
         }
+
     }
 }

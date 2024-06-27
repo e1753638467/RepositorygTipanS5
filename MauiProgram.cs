@@ -16,14 +16,9 @@ namespace gTipanS5
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-
-            string dbPath = FileAccessHelper.GetlocalfilePath("persona.db3");
+            string dbPath = FileAccessHelper.GetlocalfilePath("personas.db3");
             builder.Services.AddSingleton<PersonRepository>(s =>
             ActivatorUtilities.CreateInstance<PersonRepository>(s, dbPath));
-
-#endif
 
             return builder.Build();
         }
