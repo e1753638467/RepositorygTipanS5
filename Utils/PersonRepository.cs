@@ -11,15 +11,15 @@ namespace gTipanS5.Utils
 {
     public class PersonRepository
     {
-        string _dbPath;//ruta
+        private readonly string _dbPath;
         private SQLiteConnection conn;
 
         public string StatusMessage { get; set; }
         private void Init()
         {
-            if (conn is not null)
+            if (conn != null)
                 return;
-            conn = new(_dbPath);
+            conn = new SQLiteConnection(_dbPath);
             conn.CreateTable<Persona>();
            
         }
@@ -35,14 +35,14 @@ namespace gTipanS5.Utils
                 Init();
                 if (string.IsNullOrEmpty(nombre))
                     throw new Exception("Nombre requerido");
-                Persona person = new() { Name = nombre};
+                var person = new Persona { Name = nombre };
                 result = conn.Insert(person);
-                StatusMessage = string.Format("datos anadidos correctamente", result, nombre);
+                StatusMessage = $"Datos añadidos correctamente: {result} - {nombre}";
 
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Error ", nombre, ex.Message);
+                StatusMessage = $"Error añadiendo {nombre}: {ex.Message}";
 
             }
 
@@ -59,11 +59,50 @@ namespace gTipanS5.Utils
             catch (Exception ex)
             {
 
-                StatusMessage = string.Format("Error  al mostrar", ex.Message);
+                StatusMessage = $"Error al mostrar personas: {ex.Message}";
+                return new List<Persona>();
 
             }
-            return new List<Persona>();
+           
         }
+        public void UpdatePerson(int id, string nombre)
+        {
+            try
+            {
+                Init();
+                var person = conn.Table<Persona>().FirstOrDefault(p => p.Id == id);
+                if (person == null)
+                    throw new Exception("Persona no encontrada");
+
+                person.Name = nombre;
+                conn.Update(person);
+                StatusMessage = $"Persona actualizada correctamente: {id} - {nombre}";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Error actualizando {nombre}: {ex.Message}";
+
+            }
+        }
+        public void DeletePerson(int id)
+        {
+            try
+            {
+                Init();
+                var person = conn.Table<Persona>().FirstOrDefault(p => p.Id == id);
+                if (person == null)
+                    throw new Exception("Persona no encontrada");
+
+                conn.Delete(person);
+                StatusMessage = $"Persona eliminada correctamente: {id}";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Error eliminando persona con ID {id}: {ex.Message}";
+
+            }
+        }
+
     }
 
 }
